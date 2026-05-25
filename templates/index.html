@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+    <title>Todo App</title>
+
+    <link
+    rel="stylesheet"
+    href="{{ url_for('static', filename='style.css') }}"
+    >
+
+    <link rel="preconnect"
+    href="https://fonts.googleapis.com">
+
+    <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet">
+
+</head>
+
+<body>
+
+<div class="container">
+
+    <div class="header">
+
+        <div>
+            <h1>Todo Space ✨</h1>
+            <p>
+                Welcome back,
+                {{ current_user.username }}
+            </p>
+        </div>
+
+        <a href="/logout" class="logout">
+            Logout
+        </a>
+
+    </div>
+
+    <!-- STATS -->
+    <div class="stats">
+
+        <div class="card">
+            <h2>{{ total }}</h2>
+            <p>Total Tasks</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ completed }}</h2>
+            <p>Completed</p>
+        </div>
+
+        <div class="card">
+            <h2>{{ progress }}%</h2>
+            <p>Progress</p>
+        </div>
+
+    </div>
+
+    <!-- FORM -->
+    <form
+    action="/add"
+    method="POST"
+    class="task-form"
+    >
+
+        <input
+        type="text"
+        name="title"
+        placeholder="What do you need to do?"
+        required
+        >
+
+        <button type="submit">
+            Add
+        </button>
+
+    </form>
+
+    <!-- TASKS -->
+    <div class="tasks">
+
+        {% for task in tasks %}
+
+        <div class="task {% if task.completed %}done{% endif %}">
+
+            <div>
+
+                <h3>
+                    {{ task.title }}
+                </h3>
+
+                <small>
+                    {{ task.created_at.strftime('%d %b %Y') }}
+                </small>
+
+            </div>
+
+            <div class="actions">
+
+                <a
+                href="/complete/{{ task.id }}"
+                class="complete"
+                >
+                    {% if task.completed %}
+                        Undo
+                    {% else %}
+                        Done
+                    {% endif %}
+                </a>
+
+                <a
+                href="/delete/{{ task.id }}"
+                class="delete"
+                >
+                    Delete
+                </a>
+
+            </div>
+
+        </div>
+
+        {% endfor %}
+
+    </div>
+
+</div>
+
+</body>
+</html>
